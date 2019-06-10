@@ -1,29 +1,29 @@
 package com.paypal.service;
 
-import com.paypal.model.Measure;
-import com.paypal.repository.MeasureRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import com.paypal.model.Client;
+import com.paypal.repository.ClientRepository;
 
 
 @Service
-public class MeasureServiceImpl implements MeasureService {
+public class ClientServiceImpl implements ClientService {
 
 
     @Autowired
-    MeasureRepository  measureRepository;
+    ClientRepository clientRepository ;
 
     @Override
-    public List<Measure> getMeasureDetails()  {
+    public List<Client> getClientDetails()  {
         try {
         	
         	//List<Measure> measure = measureRepository.findAll();
-        	List<Measure> measure = measureRepository.measurefindAll();
-            return measure;
+        	List<Client> clients = clientRepository.clientfindAll();
+            return clients;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
         }
@@ -31,30 +31,29 @@ public class MeasureServiceImpl implements MeasureService {
     }
 
 	@Override
-	public Measure postMeasure(Measure measure) {
+	public Client getClientDetailById(Long id) {
 		try {
-			  measureRepository.save(measure); 
+
+			//List<Measure> measure = measureRepository.findAll();
+			Client client = clientRepository.findById(id).get();
+			return client;
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found by Id:"+id);
+		}
+	}
+
+	@Override
+	public Client postClient(Client client) {
+		try {
+			  clientRepository.save(client);
 			 } catch (DataIntegrityViolationException e) {
 			  
 			  throw new ResponseStatusException(HttpStatus.BAD_REQUEST); 
 			  } catch ( Exception e)  { 
 				  throw new ResponseStatusException(HttpStatus.BAD_REQUEST); 
 			}
-			return	  measure;
+			return	  client;
 			}
-
-
-	@Override
-	public Measure getMeasureDetailById(Long id) {
-		try {
-
-			//List<Measure> measure = measureRepository.findAll();
-			Measure measure = measureRepository.findById(id).get();
-			return measure;
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found by Id:"+id);
-		}
-	}
 	}
 
 	
